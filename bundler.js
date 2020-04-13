@@ -57,7 +57,7 @@ module.exports = function bundle (Components, out, config) {
       init = `${config.betterDocs.component.entry.join('\n')}\n${init}`
     }
   }
-  
+
   const entryFile = init + Components.map((c, i) => {
     const { displayName, filePath, type } = c.component
     const relativePath = path.relative(absoluteOut, filePath)
@@ -67,19 +67,4 @@ module.exports = function bundle (Components, out, config) {
       `${type}Components['${displayName}'] = ${name};`,
     ].join('\n')
   }).join('\n\n')
-
-  console.log('Generating entry file for "components" plugin')
-  fs.writeFileSync(entry, entryFile)
-  console.log('Bundling components')
-  const outDist = path.join(out, 'build')
-  const cmd = `NODE_ENV=development parcel build ${entry} --out-dir ${outDist}`
-  console.log(`running: ${cmd}`)
-  try {
-    execSync(cmd)
-  } catch (error) {
-    if(error.output && error.output.length){
-      console.log(error.output[1].toString())
-    }
-    throw error
-  }
 }
